@@ -2,11 +2,15 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Sheet } from "@mui/joy";
 import { useState } from "react";
 import { chats } from "../data";
+import { Head } from "@inertiajs/react";
+import ChatsPane from "./Chats/ChatsPane";
+import MessagesPane from "./MessagesPane";
 
 export default function Messages() {
     const [selectedChat, setSelectedChat] = useState(chats[0]);
     return (
         <AuthenticatedLayout>
+            <Head title="Messages" />
             <Sheet
                 sx={{
                     flex: 1,
@@ -32,13 +36,13 @@ export default function Messages() {
                         top: 52,
                     }}
                 >
-                    {/* <ChatsPane
+                    <ChatsPane
                         chats={chats}
                         selectedChatId={selectedChat.id}
                         setSelectedChat={setSelectedChat}
-                    /> */}
+                    />
                 </Sheet>
-                {/* <MessagesPane chat={selectedChat} /> */}
+                <MessagesPane chat={selectedChat} />
             </Sheet>
         </AuthenticatedLayout>
     )

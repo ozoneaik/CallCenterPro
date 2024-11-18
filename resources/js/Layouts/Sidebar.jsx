@@ -19,46 +19,23 @@ import Stack from '@mui/joy/Stack';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
-import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import QuestionAnswerRoundedIcon from '@mui/icons-material/QuestionAnswerRounded';
-import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
 import { closeSidebar } from '@/Components/utils';
 import ColorSchemeToggle from '@/Components/ColorSchemeToggle';
 import { Link } from '@inertiajs/react';
+import { SidebarAdmin } from './SidebarAdmin';
 
-function Toggler(props) {
-    const { defaultExpanded = false, renderToggle, children } = props;
-    const [open, setOpen] = React.useState(defaultExpanded);
-    return (
-        <React.Fragment>
-            {renderToggle({ open, setOpen })}
-            <Box
-                sx={[
-                    {
-                        display: 'grid',
-                        transition: '0.2s ease',
-                        '& > *': {
-                            overflow: 'hidden',
-                        },
-                    },
-                    open ? { gridTemplateRows: '1fr' } : { gridTemplateRows: '0fr' },
-                ]}
-            >
-                {children}
-            </Box>
-        </React.Fragment>
-    );
-}
+
 
 export default function Sidebar({ user }) {
+    const Logout = async () => {
+        const { status } = await axios.post(route('logout'));
+        status === 200 && window.location.reload()
+    }
     return (
         <Sheet
             className="Sidebar"
@@ -112,13 +89,13 @@ export default function Sidebar({ user }) {
                 onClick={() => closeSidebar()}
             />
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <IconButton variant="soft" color="primary" size="sm">
-                    <BrightnessAutoRoundedIcon />
+                <IconButton variant="soft" color="warning" size="sm">
+                    P
                 </IconButton>
-                <Typography level="title-lg">Acme Co.</Typography>
+                <Typography level="title-lg">PUMPKIN CallCenter</Typography>
                 <ColorSchemeToggle sx={{ ml: 'auto' }} />
             </Box>
-            <Input size="sm" startDecorator={<SearchRoundedIcon />} placeholder="Search" />
+            <Input size="sm" startDecorator={<SearchRoundedIcon />} placeholder="ค้นหาห้องแชท" />
             <Box
                 sx={{
                     minHeight: 0,
@@ -158,44 +135,7 @@ export default function Sidebar({ user }) {
                             </ListItemContent>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem nested>
-                        <Toggler
-                            renderToggle={({ open, setOpen }) => (
-                                <ListItemButton onClick={() => setOpen(!open)}>
-                                    <AssignmentRoundedIcon />
-                                    <ListItemContent>
-                                        <Typography level="title-sm">Tasks</Typography>
-                                    </ListItemContent>
-                                    <KeyboardArrowDownIcon
-                                        sx={[
-                                            open
-                                                ? {
-                                                    transform: 'rotate(180deg)',
-                                                }
-                                                : {
-                                                    transform: 'none',
-                                                },
-                                        ]}
-                                    />
-                                </ListItemButton>
-                            )}
-                        >
-                            <List sx={{ gap: 0.5 }}>
-                                <ListItem sx={{ mt: 0.5 }}>
-                                    <ListItemButton>All tasks</ListItemButton>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemButton>Backlog</ListItemButton>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemButton>In progress</ListItemButton>
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemButton>Done</ListItemButton>
-                                </ListItem>
-                            </List>
-                        </Toggler>
-                    </ListItem>
+
                     <ListItem>
                         <ListItemButton
                             selected={window.location.pathname === '/messages/roomId/roomName'}
@@ -233,6 +173,7 @@ export default function Sidebar({ user }) {
                             Settings
                         </ListItemButton>
                     </ListItem>
+                    <SidebarAdmin />
                 </List>
                 <Card
                     invertedColors
@@ -270,7 +211,12 @@ export default function Sidebar({ user }) {
                     <Typography level="title-sm">{user.name}</Typography>
                     <Typography level="body-xs">{user.email}</Typography>
                 </Box>
-                <IconButton size="sm" variant="plain" color="neutral">
+                <IconButton
+                    onClick={Logout}
+                    size="sm"
+                    variant="plain"
+                    color="neutral"
+                >
                     <LogoutRoundedIcon />
                 </IconButton>
             </Box>
