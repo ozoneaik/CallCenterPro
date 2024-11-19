@@ -4,22 +4,26 @@ import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
 import { Box, Chip, IconButton, Input } from '@mui/joy';
 import List from '@mui/joy/List';
-import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { toggleMessagesPane } from '@/Components/utils';
 import ChatListItem from './ChatListItem';
-
+import { BorderTop } from '@mui/icons-material';
 
 export default function ChatsPane(props) {
     const { chats, setSelectedChat, selectedChatId } = props;
-    return (
-        <Sheet
+    
+    // สร้าง Component สำหรับส่วนหัวที่จะตรึง
+    const StickyHeader = ({ title,S }) => (
+        <Box
             sx={{
-                borderRight: '1px solid',
+                position: 'sticky',
+                top: 0,
+                bgcolor: 'background.surface',
+                zIndex: 2,
+                borderBottom: '1px solid',
                 borderColor: 'divider',
-                height: { sm: 'calc(100dvh - var(--Header-height))', md: '100dvh' },
-                overflowY: 'auto',
+                ...S
             }}
         >
             <Stack
@@ -29,65 +33,53 @@ export default function ChatsPane(props) {
                 <Typography
                     component="h1"
                     endDecorator={
-                        <Chip
-                            variant="soft"
-                            color="primary"
-                            size="md"
-                            slotProps={{ root: { component: 'span' } }}
-                        >
+                        <Chip variant="soft" color="primary" size="md" slotProps={{ root: { component: 'span' } }}>
                             4
                         </Chip>
                     }
                     sx={{ fontSize: { xs: 'md', md: 'lg' }, fontWeight: 'lg', mr: 'auto' }}
                 >
-                    Messages
+                    {title}
                 </Typography>
-                <IconButton
-                    variant="plain"
-                    aria-label="edit"
-                    color="neutral"
-                    size="sm"
-                    sx={{ display: { xs: 'none', sm: 'unset' } }}
-                >
-                    <EditNoteRoundedIcon />
-                </IconButton>
-                <IconButton
-                    variant="plain"
-                    aria-label="edit"
-                    color="neutral"
-                    size="sm"
-                    onClick={() => {
-                        toggleMessagesPane();
-                    }}
-                    sx={{ display: { sm: 'none' } }}
-                >
+
+                <IconButton variant="plain" aria-label="edit" color="neutral" size="sm" onClick={toggleMessagesPane} sx={{ display: { sm: 'none' } }}>
                     <CloseRoundedIcon />
                 </IconButton>
             </Stack>
             <Box sx={{ px: 2, pb: 1.5 }}>
-                <Input
-                    size="sm"
-                    startDecorator={<SearchRoundedIcon />}
-                    placeholder="Search"
-                    aria-label="Search"
-                />
+                <Input size="sm" startDecorator={<SearchRoundedIcon />} placeholder="Search" aria-label="Search"/>
             </Box>
-            <List
-                sx={{
-                    py: 0,
-                    '--ListItem-paddingY': '0.75rem',
-                    '--ListItem-paddingX': '1rem',
-                }}
-            >
-                {chats.map((chat) => (
-                    <ChatListItem
-                        key={chat.id}
-                        {...chat}
-                        setSelectedChat={setSelectedChat}
-                        selectedChatId={selectedChatId}
-                    />
-                ))}
-            </List>
-        </Sheet>
+        </Box>
+    );
+
+    return (
+        <>
+            <Sheet sx={{borderRight: '1px solid',borderColor: 'divider',height: '50dvh',overflowY: 'auto'}}>
+                <StickyHeader title="กำลังเดินการ" />
+                <List sx={{py: 0,'--ListItem-paddingY': '0.75rem','--ListItem-paddingX': '1rem'}}>
+                    {chats.map((chat) => (
+                        <ChatListItem
+                            key={chat.id}
+                            {...chat}
+                            setSelectedChat={setSelectedChat}
+                            selectedChatId={selectedChatId}
+                        />
+                    ))}
+                </List>
+            </Sheet>
+            <Sheet sx={{borderRight: '1px solid',borderColor: 'divider',height: '50dvh',overflowY: 'auto'}}>
+                <StickyHeader title="รอดำเนินการ" S={{borderTop : 'solid #0b6bcb 1px'}}/>
+                <List sx={{py: 0,'--ListItem-paddingY': '0.75rem','--ListItem-paddingX': '1rem'}}>
+                    {chats.map((chat) => (
+                        <ChatListItem
+                            key={chat.id}
+                            {...chat}
+                            setSelectedChat={setSelectedChat}
+                            selectedChatId={selectedChatId}
+                        />
+                    ))}
+                </List>
+            </Sheet>
+        </>
     );
 }

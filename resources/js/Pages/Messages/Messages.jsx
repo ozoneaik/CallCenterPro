@@ -7,9 +7,12 @@ import ChatsPane from "./Chats/ChatsPane";
 import MessagesPane from "./MessagesPane";
 
 export default function Messages() {
-    const [selectedChat, setSelectedChat] = useState(chats[0]);
+    // const [selectedChat, setSelectedChat] = useState(chats[0]);
+    const [selectedChat, setSelectedChat] = useState({});
     return (
-        <AuthenticatedLayout>
+        <>
+        
+        {/* <AuthenticatedLayout> */}
             <Head title="Messages" />
             <Sheet
                 sx={{
@@ -42,8 +45,15 @@ export default function Messages() {
                         setSelectedChat={setSelectedChat}
                     />
                 </Sheet>
-                <MessagesPane chat={selectedChat} />
+                {selectedChat.id ? (
+                    <MessagesPane chat={selectedChat} />
+                ) : (
+                    <>กรุณาเลือกแชท</>
+                )}
             </Sheet>
-        </AuthenticatedLayout>
+        {/* </AuthenticatedLayout> */}
+        </>
     )
 }
+
+Messages.layout = (page) => <AuthenticatedLayout>{page}</AuthenticatedLayout>
