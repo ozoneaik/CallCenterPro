@@ -22,11 +22,11 @@ export const Pusher = () => {
         <>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                open={true}
+                open={open}
                 autoHideDuration={3000}
                 onClose={() => setOpen(false)}
                 variant="solid"
-                color="warning"
+                color="success"
                 invertedColors
                 sx={(theme) => ({
                     background: `linear-gradient(45deg, ${theme.palette.primary[600]} 30%, ${theme.palette.primary[500]} 90%})`,
@@ -36,7 +36,7 @@ export const Pusher = () => {
                 <div>
                     <Typography level="title-lg">Hey, Wait!!</Typography>
                     <Typography sx={{ mt: 1, mb: 2 }}>
-                        Are you sure, you want to leave this page without confirming your order?
+                        {message}
                     </Typography>
                     <Stack direction="row" spacing={1}>
                         <Button variant="solid" color="primary" onClick={() => setOpen(false)}>
